@@ -48,7 +48,7 @@ class Landscape(object):
         c=cls()
         c.x=x
         c.y=y
-        if v==None:
+        if v is None:
             c.v=np.ones(x.size)
         else:
             c.v=v
