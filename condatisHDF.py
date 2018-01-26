@@ -9,8 +9,8 @@ import tables
 import gisattribs as ga
 
 def makeProject(projname,title):
-    h5=tables.openFile(projname,mode="w",title=title)
-    h5.createGroup("/",'scenarios','Scenarios')
+    h5=tables.open_file(projname,mode="w",title=title)
+    h5.create_group("/",'scenarios','Scenarios')
     h5.root.scenarios._v_attrs.nextIndex=0
     return h5
 
@@ -131,10 +131,10 @@ class CondatisCoreHDF(cc.CondatisCore):
         
     def makeScenario(self,name):
         h5=self.h5
-        self.scenario=self.h5.createGroup("/scenarios",name,"Scenario")
+        self.scenario=self.h5.create_group("/scenarios",name,"Scenario")
         gname="/scenarios/"+name
       #  h5.createGroup(gname,"input","Landscape data")
-        h5.createGroup(gname,"combined","Landscape combined with source and sink")
+        h5.create_group(gname,"combined","Landscape combined with source and sink")
       #  h5.createGroup(gname,"metrics","Population Metrics")
       #  h5.createGroup(gname,"plugins","Plugins")
         self.scenarioDefaults()
@@ -181,9 +181,9 @@ class CondatisCoreHDF(cc.CondatisCore):
             scenario.combined.y.remove()
         if scenario.combined.__contains__('V'):
             scenario.combined.V.remove()
-        h5.createArray(scenario.combined,'x',xa)
-        h5.createArray(scenario.combined,'y',ya)
-        h5.createArray(scenario.combined,'V',xa*0)
+        h5.create_array(scenario.combined,'x',xa)
+        h5.create_array(scenario.combined,'y',ya)
+        h5.create_array(scenario.combined,'V',xa*0)
         
     def modifyHabitat(self,land):
         self._addHab(land)
@@ -204,9 +204,9 @@ class CondatisCoreHDF(cc.CondatisCore):
         if scenario.__contains__('cell'):
             scenario.cell.remove()
 
-        self.x_=h5.createArray(scenario,'x',land.x)
-        self.y_=h5.createArray(scenario,'y',land.y)
-        self.ap_=h5.createArray(scenario,'ap',land.v)
+        self.x_=h5.create_array(scenario,'x',land.x)
+        self.y_=h5.create_array(scenario,'y',land.y)
+        self.ap_=h5.create_array(scenario,'ap',land.v)
         # Can I remove this?
         #h5.createArray(scenario,'cell',np.ones(land.x.size))
 
@@ -241,8 +241,8 @@ class CondatisCoreHDF(cc.CondatisCore):
             scenario.or_x.remove()
         if scenario.__contains__('or_y'):
             scenario.or_y.remove()
-        self.sx_=h5.createArray(scenario,'or_x',land.x)
-        self.sy_=h5.createArray(scenario,'or_y',land.y)
+        self.sx_=h5.create_array(scenario,'or_x',land.x)
+        self.sy_=h5.create_array(scenario,'or_y',land.y)
 
     def _addTarget(self,land):
         h5=self.h5
@@ -251,8 +251,8 @@ class CondatisCoreHDF(cc.CondatisCore):
             scenario.tg_x.remove()
         if scenario.__contains__('tg_y'):
             scenario.tg_y.remove()
-        self.tx_=h5.createArray(scenario,'tg_x',land.x)
-        self.ty_=h5.createArray(scenario,'tg_y',land.y)
+        self.tx_=h5.create_array(scenario,'tg_x',land.x)
+        self.ty_=h5.create_array(scenario,'tg_y',land.y)
 
     # Calculating
     def _deleteOldCalc(self):
@@ -277,13 +277,13 @@ class CondatisCoreHDF(cc.CondatisCore):
     def _saveCalc(self):
         sc=self.scenario
         h5=self.h5
-        self.V0_=h5.createArray(sc,'V0',self.V0_)
-        self.I_=h5.createArray(sc,'I',self.I_)
+        self.V0_=h5.create_array(sc,'V0',self.V0_)
+        self.I_=h5.create_array(sc,'I',self.I_)
         sc._v_attrs.I0=self.cond_
         sc._v_attrs.totalLinkStrength=self.tls_
-        sc.cin_=h5.createArray(sc,"ipv_in",self.cin_)
-        sc.cout_=h5.createArray(sc,"ipv_out",self.cout_)
-        sc.free_=h5.createArray(sc,"ipv_free",self.cfree_)
+        sc.cin_=h5.create_array(sc,"ipv_in",self.cin_)
+        sc.cout_=h5.create_array(sc,"ipv_out",self.cout_)
+        sc.free_=h5.create_array(sc,"ipv_free",self.cfree_)
         h5.flush()
 
     def calc(self):
@@ -314,16 +314,16 @@ class CondatisCoreHDF(cc.CondatisCore):
     def _savePowCalc(self):
         sc=self.scenario
         h5=self.h5
-        h5.createArray(sc,'edgePower',self.Pij_)
+        h5.create_array(sc,'edgePower',self.Pij_)
         sc._v_attrs.totalEdgePower=self.totalEdgePower
         sc._v_attrs.maxEdgePower=self.maxEdgePower
         sc._v_attrs.edgePowerShape=self.PijU.shape
-        h5.createArray(sc,'sig_pow',self.sigpow)
-        h5.createArray(sc,'sorted_sig_power',self.pps)
-        h5.createArray(sc,'sigx1',self.sigx1)
-        h5.createArray(sc,'sigx2',self.sigx2)
-        h5.createArray(sc,'sigy1',self.sigy1)
-        h5.createArray(sc,'sigy2',self.sigy2)
+        h5.create_array(sc,'sig_pow',self.sigpow)
+        h5.create_array(sc,'sorted_sig_power',self.pps)
+        h5.create_array(sc,'sigx1',self.sigx1)
+        h5.create_array(sc,'sigx2',self.sigx2)
+        h5.create_array(sc,'sigy1',self.sigy1)
+        h5.create_array(sc,'sigy2',self.sigy2)
 
     def hasPower(self):
         sc=self.scenario
